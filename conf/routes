@@ -1,0 +1,11 @@
+GET     /                           controllers.MainController.index()
+GET     /500                        controllers.MainController.error500()
+
+# Security
+GET     /login                      controllers.AuthController.login()
+POST    /login                      controllers.AuthController.doLogin()
+GET     /signup                     controllers.AuthController.register()
+POST    /register                   controllers.AuthController.registerUser()
+GET     /logout                     controllers.AuthController.logout()
+
+GET     /assets/*file               controllers.MainController.versioned(path="/public", file: Asset)
