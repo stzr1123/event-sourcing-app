@@ -1,5 +1,5 @@
-name := """play-event-sourcing-starter"""
-organization := "com.appliedscala.streaming"
+name := """event-sourcing-app2"""
+organization := "com.github.stzr1123"
 version := "1.0-SNAPSHOT"
 scalaVersion := "2.13.4"
 
