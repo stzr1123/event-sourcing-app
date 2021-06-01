@@ -1,10 +1,20 @@
 name := """event-sourcing-app2"""
-organization := "com.github.stzr1123"
-version := "1.0-SNAPSHOT"
-scalaVersion := "2.13.4"
 
-lazy val root = (project in file(".")).
-  enablePlugins(PlayScala)
+val commonSettings = Seq(
+  organization := "com.github.stzr1123",
+  version := "1.0-SNAPSHOT",
+  scalaVersion := "2.13.4"
+)
+
+lazy val root = (project in file("."))
+  .settings(commonSettings)
+  .enablePlugins(PlayScala)
+  .aggregate(events)
+  .dependsOn(events)
+
+lazy val events = (project in file("events")).settings(commonSettings)
+  .settings(Seq(libraryDependencies := Seq(
+    "com.typesafe.play" %% "play-json" % "2.8.1")))
 
 pipelineStages := Seq(digest)
 
