@@ -5,7 +5,7 @@ import play.api.libs.json.{JsValue, Json, Reads}
 import java.util.UUID
 
 case class TagCreated(id: UUID, text: String, createdBy: UUID) extends EventData {
-  override def action = TagCreated.actionName
+  override def action: String = TagCreated.actionName
   override def json: JsValue = Json.writes[TagCreated].writes(this)
 }
 
