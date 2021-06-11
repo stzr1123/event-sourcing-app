@@ -38,6 +38,23 @@ class TagController(components: ControllerComponents,
     )
   }
 
+  def deleteTag(): Action[AnyContent] = userAuthAction.async { implicit request =>
+    deleteTagForm.bindFromRequest().fold(
+      _ => Future.successful(BadRequest),
+      data => {
+        tagEventProducer.deleteTag(data.id, request.user.userId).map { tags =>
+          Ok(Json.toJson(tags))
+        }
+      }
+    )
+  }
+
+  def getTags: Action[AnyContent] = Action.async { implicit request =>
+    readService.getState.map { state =>
+      Ok(Json.toJson(state.tags))
+    }
+  }
+
   import java.util.UUID
   case class CreateTagData(text: String)
   case class DeleteTagData(id: UUID)
