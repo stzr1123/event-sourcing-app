@@ -37,14 +37,19 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
 
   lazy val mainController = wire[MainController]
   lazy val authController = wire[AuthController]
+  lazy val tagController = wire[TagController]
 
   lazy val sessionDao = wire[SessionDao]
   lazy val userDao = wire[UserDao]
+  lazy val logDao = wire[LogDao]
+  lazy val inMemoryReadDao = wire[InMemoryReadDao]
 
   lazy val userService = wire[UserService]
   lazy val authService = wire[AuthService]
   lazy val userAuthAction = wire[UserAuthAction]
   lazy val userAwareAction = wire[UserAwareAction]
+  lazy val readService: ReadService = wire[ReadService]
+  lazy val tagEventProducer = wire[TagEventProducer]
 
   override lazy val dynamicEvolutions = new DynamicEvolutions
 
@@ -55,6 +60,9 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
 
   val onStart: Unit = {
     DBs.setupAll()
-    applicationEvolutions
+    val evolutions = applicationEvolutions
+    if (evolutions.upToDate) {
+      readService.init()
+    }
   }
 }
