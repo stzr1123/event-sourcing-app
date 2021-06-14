@@ -1,6 +1,5 @@
 package services
 
-import akka.actor.TypedActor.dispatcher
 import com.github.stzr1123.events.{EventData, LogRecord, TagCreated, TagDeleted}
 import dao.LogDao
 import model.Tag
@@ -10,6 +9,7 @@ import java.util.UUID
 import scala.concurrent.Future
 
 class TagEventProducer(logDao: LogDao, readService: ReadService) {
+  import util.ThreadPools.CPU
   private def createLogRecord(eventData: EventData): LogRecord = {
     LogRecord(UUID.randomUUID(), eventData.action, eventData.json, ZonedDateTime.now())
   }
@@ -24,7 +24,7 @@ class TagEventProducer(logDao: LogDao, readService: ReadService) {
     val tagId = UUID.randomUUID()
     val event = TagCreated(tagId, text, createdBy)
     val record = createLogRecord(event)
-    // this is shit for obvious reasons. we're sending the same update
+    // this is bad for obvious reasons. we're sending the same update
     // to two different places
     logDao.insertLogRecord(record).flatMap { _ =>
       adjustReadState(record)
