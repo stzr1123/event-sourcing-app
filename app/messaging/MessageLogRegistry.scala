@@ -36,13 +36,18 @@ class MessageLogRegistry(configuration: Configuration,
     .withGroupId(groupName)
     .withProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, offsetReset)
 
-  override def shutdown(): Unit = ???
+  /*
+    In the case of akka-stream-kafka no shutdown operation is needed.
+   */
+  override def shutdown(): Unit = ()
 
   override def createProducer(topic: String): IMessageProducer = {
     val producerSettings = ProducerSettings(actorSystem,
       new ByteArraySerializer, new ByteArraySerializer)
       .withBootstrapServers(bootstrapServers)
     val producer = producerSettings.createKafkaProducer()
+    // since IMessageProducer is a single method interface (i.e. "functional interface")
+    // we can simply return a lambda function
     (bytes: Array[Byte]) => producer.send(new ProducerRecord(topic, bytes))
   }
 
