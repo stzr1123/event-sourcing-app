@@ -7,6 +7,7 @@ import router.Routes
 import com.softwaremill.macwire._
 import _root_.controllers._
 import dao._
+import messaging.MessageLogRegistry
 import play.api.mvc.DefaultControllerComponents
 import scalikejdbc.config.DBs
 import security.{UserAuthAction, UserAwareAction}
@@ -43,6 +44,8 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   lazy val userDao = wire[UserDao]
   lazy val logDao = wire[LogDao]
   lazy val inMemoryReadDao = wire[InMemoryReadDao]
+
+  lazy val messageLogRegistry = wire[MessageLogRegistry]
 
   lazy val userService = wire[UserService]
   lazy val authService = wire[AuthService]
