@@ -8,7 +8,7 @@ import java.util.UUID
 case class LogRecord(id: UUID, action: String,
                      data: JsValue, timestamp: ZonedDateTime) {
   def encode: Array[Byte] = {
-    Json.toJson(this)(LogRecord.format).toString().getBytes()
+    Json.toJson(this)(LogRecord.format).toString.getBytes
   }
 }
 
