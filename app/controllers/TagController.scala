@@ -27,24 +27,22 @@ class TagController(components: ControllerComponents,
   }
 
   import util.ThreadPools.CPU
-  def createTag(): Action[AnyContent] = userAuthAction.async { implicit request =>
+  def createTag(): Action[AnyContent] = userAuthAction { implicit request =>
     createTagForm.bindFromRequest().fold(
-      _ => Future.successful(BadRequest),
+      _ => BadRequest,
       data => {
-        tagEventProducer.createTag(data.text, request.user.userId).map { tags =>
-          Ok(Json.toJson(tags))
-        }
+        tagEventProducer.createTag(data.text, request.user.userId)
+        Ok
       }
     )
   }
 
-  def deleteTag(): Action[AnyContent] = userAuthAction.async { implicit request =>
+  def deleteTag(): Action[AnyContent] = userAuthAction { implicit request =>
     deleteTagForm.bindFromRequest().fold(
-      _ => Future.successful(BadRequest),
+      _ => BadRequest,
       data => {
-        tagEventProducer.deleteTag(data.id, request.user.userId).map { tags =>
-          Ok(Json.toJson(tags))
-        }
+        tagEventProducer.deleteTag(data.id, request.user.userId)
+        Ok
       }
     )
   }
