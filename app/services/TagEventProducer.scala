@@ -2,40 +2,26 @@ package services
 
 import com.github.stzr1123.events.{EventData, LogRecord, TagCreated, TagDeleted}
 import dao.LogDao
+import messaging.IMessageProcessingRegistry
 import model.Tag
 
 import java.time.ZonedDateTime
 import java.util.UUID
 import scala.concurrent.Future
 
-class TagEventProducer(logDao: LogDao, readService: ReadService) {
-  import util.ThreadPools.CPU
-  private def createLogRecord(eventData: EventData): LogRecord = {
-    LogRecord(UUID.randomUUID(), eventData.action, eventData.json, ZonedDateTime.now())
-  }
+class TagEventProducer(registry: IMessageProcessingRegistry) {
+  private val producer = registry.createProducer("tags")
 
-  private def adjustReadState(event: LogRecord): Future[Seq[Tag]] = {
-    readService.adjustState(event).flatMap { _ =>
-      readService.getState.map(_.tags)
-    }
-  }
-
-  def createTag(text: String, createdBy: UUID): Future[Seq[Tag]] = {
+  def createTag(text: String, createdBy: UUID): Unit = {
     val tagId = UUID.randomUUID()
     val event = TagCreated(tagId, text, createdBy)
-    val record = createLogRecord(event)
-    // this is bad for obvious reasons. we're sending the same update
-    // to two different places
-    logDao.insertLogRecord(record).flatMap { _ =>
-      adjustReadState(record)
-    }
+    val record = LogRecord.fromEvent(event)
+    producer.send(record.encode)
   }
 
-  def deleteTag(tagId: UUID, deletedBy: UUID): Future[Seq[Tag]] = {
+  def deleteTag(tagId: UUID, deletedBy: UUID): Unit = {
     val event = TagDeleted(tagId, deletedBy)
-    val record = createLogRecord(event)
-    logDao.insertLogRecord(record).flatMap { _ =>
-      adjustReadState(record)
-    }
+    val record = LogRecord.fromEvent(event)
+    producer.send(record.encode)
   }
 }
