@@ -5,8 +5,6 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import security.UserAuthAction
 import services.{ReadService, TagEventProducer}
 
-import scala.concurrent.Future
-
 class TagController(components: ControllerComponents,
                     tagEventProducer: TagEventProducer,
                     userAuthAction: UserAuthAction,
