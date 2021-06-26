@@ -52,6 +52,7 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   lazy val userAuthAction = wire[UserAuthAction]
   lazy val userAwareAction = wire[UserAwareAction]
   lazy val readService: ReadService = wire[ReadService]
+  lazy val clientBroadcastService: ClientBroadcastService = wire[ClientBroadcastService]
   lazy val tagEventProducer = wire[TagEventProducer]
 
   override lazy val dynamicEvolutions = new DynamicEvolutions
