@@ -1,13 +1,9 @@
 package services
 
-import com.github.stzr1123.events.{EventData, LogRecord, TagCreated, TagDeleted}
-import dao.LogDao
+import com.github.stzr1123.events.{LogRecord, TagCreated, TagDeleted}
 import messaging.IMessageProcessingRegistry
-import model.Tag
 
-import java.time.ZonedDateTime
 import java.util.UUID
-import scala.concurrent.Future
 
 class TagEventProducer(registry: IMessageProcessingRegistry) {
   private val producer = registry.createProducer("tags")
