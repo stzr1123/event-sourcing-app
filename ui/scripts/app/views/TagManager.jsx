@@ -1,12 +1,12 @@
 import React from 'react';
 import axios from 'axios';
+import {connect} from "react-redux";
 
 class TagManager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: '',
-            tags: []
+            text: ''
         };
     }
 
@@ -16,9 +16,9 @@ class TagManager extends React.Component {
 
     handleResponse = (response) => {
         if (response.status === 200) {
-            this.setState({
-                text: '',
-                tags: response.data
+            this.props.dispatch({
+                type: 'tags_updated',
+                data: response.data
             })
         } else {
             console.error(response.statusText);
@@ -27,17 +27,21 @@ class TagManager extends React.Component {
 
     addTag = () => {
         const text = this.state.text;
-        const isNew = this.state.tags.findIndex((el) => {
+        const isNew = this.props.tags.findIndex((el) => {
             return el.text === text;
         }) === -1;
         if (isNew) {
-            axios.post('/api/createTag', { text }).then(this.handleResponse);
+            axios.post('/api/createTag', { text }).then(() => {
+                this.setState({
+                    text: ''
+                })
+            });
         }
     };
 
     deleteTag = (id) => {
         return () => {
-            axios.post('/api/deleteTag', { id }).then(this.handleResponse);
+            axios.post('/api/deleteTag', { id });
         };
     };
 
@@ -54,7 +58,7 @@ class TagManager extends React.Component {
     };
 
     render = () => {
-        const tags = this.state.tags;
+        const tags = this.props.tags;
         return <div className="tag-manager">
             <div className="tag-manager__input-panel">
                 <div className={"tag-manager__input-panel__input"}>
@@ -79,4 +83,8 @@ class TagManager extends React.Component {
     }
 }
 
-export default TagManager;
+const mapStateToProps = (state) => {
+    return { tags: state.tags }
+};
+
+export default connect(mapStateToProps)(TagManager);
