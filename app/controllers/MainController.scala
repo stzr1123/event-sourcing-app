@@ -6,11 +6,12 @@ import play.api.http.ContentTypes
 import play.api.libs.EventSource
 import play.api.mvc._
 import security.{UserAuthAction, UserAwareAction, UserAwareRequest}
-import services.ClientBroadcastService
+import services.{ClientBroadcastService, ConsumerAggregator}
 
 
 class MainController(components: ControllerComponents, assets: Assets,
                      clientBroadcastService: ClientBroadcastService,
+                     consumerAggregator: ConsumerAggregator,
                      userAuthAction: UserAuthAction,
                      userAwareAction: UserAwareAction)
   extends AbstractController(components) {

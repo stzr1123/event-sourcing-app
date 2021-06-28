@@ -54,11 +54,15 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   lazy val readService: ReadService = wire[ReadService]
   lazy val clientBroadcastService: ClientBroadcastService = wire[ClientBroadcastService]
   lazy val tagEventProducer = wire[TagEventProducer]
+  lazy val tagEventConsumer = wire[TagEventConsumer]
+  lazy val logRecordConsumer = wire[LogRecordConsumer]
+  lazy val consumerAggregator = wire[ConsumerAggregator]
 
   override lazy val dynamicEvolutions = new DynamicEvolutions
 
   applicationLifecycle.addStopHook { () =>
     DBs.closeAll()
+    messageLogRegistry.shutdown()
     Future.successful(())
   }
 
