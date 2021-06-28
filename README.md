@@ -1,11 +1,11 @@
 # Event Sourcing App
 Following the instruction from the book *Practical Event Sourcing with Scala* by Denis Kalinin.
 
-This is an application which experiments with the event sourcing pattern. 
+This is an application which experiments with the Event Sourcing Pattern. 
 
-Instead of implementing the traditional CRUD functionality through exposed APIs which directly act on a database, here we implement consumers and producers. These services publish events to Kafka and modify them asynchronously. 
+Instead of implementing the traditional CRUD functionality through exposed APIs which directly act on a database, here we implement consumers and producers. These services publish events to Kafka and consume and act on them asynchronously. 
 
-Relevant backend state changes are propagated to the frontend through Server-Sent Events instead of being updated through traditional polling endpoints.
+Additionally, relevant backend state changes are propagated to the frontend through Server-Sent Events instead of being updated through traditional polling endpoints.
 
 ## Application Overview
 * Backend uses Play 2.8
