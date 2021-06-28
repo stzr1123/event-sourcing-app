@@ -1,4 +1,4 @@
-name := """event-sourcing-app2"""
+name := """event-sourcing-app"""
 
 val commonSettings = Seq(
   organization := "com.github.stzr1123",
