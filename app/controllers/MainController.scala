@@ -15,7 +15,6 @@ class MainController(components: ControllerComponents, assets: Assets,
                      userAuthAction: UserAuthAction,
                      userAwareAction: UserAwareAction)
   extends AbstractController(components) {
-  import util.ThreadPools.CPU
 
   def index(): Action[AnyContent] = userAwareAction { request =>
     Ok(views.html.pages.react(buildNavData(request),
@@ -32,7 +31,7 @@ class MainController(components: ControllerComponents, assets: Assets,
 
   def versioned(path: String, file: Asset): Action[AnyContent] = assets.versioned(path, file)
 
-  def serverEventStream() = userAwareAction { request =>
+  def serverEventStream(): Action[AnyContent] = userAwareAction { request =>
     val source = clientBroadcastService.createEventStream(request.user.map(_.userId))
     Ok.chunked(source.via(EventSource.flow)).as(ContentTypes.EVENT_STREAM)
   }
