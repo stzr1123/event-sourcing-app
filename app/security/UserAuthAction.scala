@@ -15,7 +15,7 @@ class UserAuthAction(authService: AuthService, ec: ExecutionContext,
   extends ActionBuilder[UserAuthRequest, AnyContent] {
 
   override implicit val executionContext = ec
-  override def parser = playBodyParsers.defaultBodyParser
+  override def parser: BodyParser[AnyContent] = playBodyParsers.defaultBodyParser
 
   def invokeBlock[A](request: Request[A],
             block: UserAuthRequest[A] => Future[Result]): Future[Result] = {
