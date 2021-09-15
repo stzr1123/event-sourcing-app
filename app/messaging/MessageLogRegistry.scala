@@ -21,7 +21,7 @@ class MessageLogRegistry(configuration: Configuration,
 
   case class ConsumerParams(groupName: String, topics: Set[String])
 
-  private val AllTopics = Set("tags")
+  private val AllTopics = Set("tags", "users")
 
   private def parseConsumerParams(queue: String): ConsumerParams = {
     val parts = queue.split("\\.")
