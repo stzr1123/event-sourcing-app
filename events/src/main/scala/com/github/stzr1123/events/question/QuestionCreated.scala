@@ -7,7 +7,7 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 case class QuestionCreated(title: String, details: Option[String],
-                           tags: Seq[UUID], questionsId: UUID, createdBy: UUID,
+                           tags: Seq[UUID], questionId: UUID, createdBy: UUID,
                            created: ZonedDateTime) extends EventData {
   override def action: String = QuestionCreated.actionName
 

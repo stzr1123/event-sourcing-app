@@ -23,7 +23,7 @@ create table tag_question
     tag_id uuid not null,
     question_id uuid not null,
     foreign key (tag_id) references tags(tag_id) on delete cascade,
-    foreign key (question_id) references question_user(question_id) on delete cascade ,
+    foreign key (question_id) references question_user(question_id) on delete cascade,
     primary key (tag_id, question_id)
 );
 
