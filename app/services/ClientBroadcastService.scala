@@ -4,7 +4,7 @@ import akka.Done
 import akka.stream.scaladsl.Source
 import io.reactivex.rxjava3.processors.PublishProcessor
 import org.reactivestreams.Subscriber
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsObject, JsString, JsValue}
 
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
@@ -41,6 +41,12 @@ class ClientBroadcastService {
     toClient
   }
 
+  def sendErrorMessage(userId: UUID, message: String): Future[Unit] = Future {
+    connectedClients.values().stream().filter(_.userId.contains(userId)).
+      forEach { client =>
+        client.out.onNext(JsObject(Seq("error" -> JsString(message))))
+      }
+  }
 
   case class ConnectedClient(userId: Option[UUID], out: Subscriber[JsValue])
 }
