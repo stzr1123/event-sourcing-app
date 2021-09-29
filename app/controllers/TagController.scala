@@ -5,6 +5,8 @@ import play.api.mvc.{AbstractController, Action, AnyContent, ControllerComponent
 import security.UserAuthAction
 import services.{ReadService, TagEventProducer}
 
+import scala.concurrent.Future
+
 class TagController(components: ControllerComponents,
                     tagEventProducer: TagEventProducer,
                     userAuthAction: UserAuthAction,
@@ -25,22 +27,26 @@ class TagController(components: ControllerComponents,
   }
 
   import util.ThreadPools.CPU
-  def createTag(): Action[AnyContent] = userAuthAction { implicit request =>
+  def createTag(): Action[AnyContent] = userAuthAction.async { implicit request =>
     createTagForm.bindFromRequest().fold(
-      _ => BadRequest,
+      _ => Future.successful(BadRequest),
       data => {
-        tagEventProducer.createTag(data.text, request.user.userId)
-        Ok
+        tagEventProducer.createTag(data.text, request.user.userId).map {
+          case Some(_) => InternalServerError
+          case None => Ok
+        }
       }
     )
   }
 
-  def deleteTag(): Action[AnyContent] = userAuthAction { implicit request =>
+  def deleteTag(): Action[AnyContent] = userAuthAction.async { implicit request =>
     deleteTagForm.bindFromRequest().fold(
-      _ => BadRequest,
+      _ => Future.successful(BadRequest),
       data => {
-        tagEventProducer.deleteTag(data.id, request.user.userId)
-        Ok
+        tagEventProducer.deleteTag(data.id, request.user.userId).map {
+          case Some(_) => InternalServerError
+          case None => Ok
+        }
       }
     )
   }
