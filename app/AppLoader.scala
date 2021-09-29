@@ -44,6 +44,8 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   lazy val userDao = wire[UserDao]
   lazy val logDao = wire[LogDao]
   lazy val inMemoryReadDao = wire[InMemoryReadDao]
+  lazy val validationDao = wire[ValidationDao]
+  lazy val validationService = wire[ValidationService]
 
   lazy val messageLogRegistry = wire[MessageLogRegistry]
 
@@ -51,7 +53,7 @@ class AppComponents(context: Context) extends BuiltInComponentsFromContext(conte
   lazy val authService = wire[AuthService]
   lazy val userAuthAction = wire[UserAuthAction]
   lazy val userAwareAction = wire[UserAwareAction]
-  lazy val readService: ReadService = wire[ReadService]
+  lazy val readService = wire[ReadService]
   lazy val clientBroadcastService: ClientBroadcastService = wire[ClientBroadcastService]
   lazy val tagEventProducer = wire[TagEventProducer]
   lazy val tagEventConsumer = wire[TagEventConsumer]
