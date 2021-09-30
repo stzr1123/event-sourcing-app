@@ -9,9 +9,7 @@ import java.util.UUID
 import scala.collection.mutable.{Map => MMap}
 import scala.concurrent.{Future, Promise}
 
-/*
-  Not protected against concurrent read/writes.
- */
+
 class InMemoryReadDao(implicit mat: Materializer) {
   import util.ThreadPools.CPU
   private object State {
