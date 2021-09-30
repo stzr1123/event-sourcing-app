@@ -9,7 +9,11 @@ import java.util.UUID
 import scala.collection.mutable.{Map => MMap}
 import scala.concurrent.{Future, Promise}
 
-
+/*
+  We want to get read of the InMemoryReadDao because it does not
+  scale as the number of tags increases. It needs to initialize its whole
+  state with each application restart.
+ */
 class InMemoryReadDao(implicit mat: Materializer) {
   import util.ThreadPools.CPU
   private object State {
